@@ -1,0 +1,8 @@
+*.sfc
+*.sfc.dbg
+*.dbg.png
+*.map
+ignore/
+build/
+assetgen/
+__pycache__/
