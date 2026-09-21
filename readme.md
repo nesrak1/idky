@@ -10,6 +10,7 @@ Subject to change. Build process is not super smooth yet, just enough to have th
 
 - Have ca65/ld65 on your path
 - Have superfamiconv in the tools folder (0.12.0-beta4 or newer)
+- Install ortools for Python (`pip install ortools`)
 - Run `make`
 
 ## project structure
