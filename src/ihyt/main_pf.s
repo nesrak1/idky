@@ -11,6 +11,8 @@
 .include "wf_regs.inc"
 .include "wf_video.inc"
 
+.include "pf_entity.inc"
+
 .include "all_assets.inc"
 
 .segment "MODEPF_CODE"
@@ -62,6 +64,30 @@ PfZero:
 ;; [outputs] ?
 ;; [kills] A, X, Y
 .proc ModePfMainSetup
+SetupPlayerPos:
+    ; if VWrdNextLvl isn't set, we probably entered a
+    ; menu or something, DON'T set the player position at
+    ; all and assume what it's at right now is correct.
+    lda VWrdNextLvl
+    beq NotSettingPlayerPos
+        sta VWrdCurLvl
+
+        ldx VWrdNextX
+        stx VPlyData + TPlyData::px
+
+        ldx VWrdNextY
+        stx VPlyData + TPlyData::py
+
+        ldx #0
+        stx VPlyData + TPlyData::pvx ; + TPlyData::pvy
+        stx VPlyData + TPlyData::pvya
+        stx VPlyData + TPlyData::jmptime ; + TPlyData::jmpcnt
+        stx VPlyData + TPlyData::grab ; + TPlyData::oldgrab
+        stx VPlyData + TPlyData::hoptime ; + TPlyData::hopdir
+        stx VPlyData + TPlyData::stamina ; + TPlyData::health
+        stz VPlyData + TPlyData::fl_pri
+    NotSettingPlayerPos:
+
 SetupStart:
     ; INIDSP = force blank
     WfvScreenHide
@@ -69,7 +95,7 @@ SetupStart:
     ; NMITIMEN = enable vblank nmi events and controller reads
     WfvInterruptSetup
 
-SetupBG:
+SetupBg:
     ; BGMODE = mode 1, BG3 priority, 16x16 size BGs 1 & 2
     WfvBgMode 1, 1, 1,1,0,0
 
@@ -88,8 +114,8 @@ SetupBG:
     lda #$80
     sta VMAIN
 
-    ; TMAIN = enable BG1, ~~BG2~~, ~~BG3~~, and ~~sprites~~
-    lda #%00000001
+    ; TMAIN = enable BG1, ~~BG2~~, ~~BG3~~, and sprites
+    lda #%00010001
     sta TMAIN
 
     jsr PfLoadMapTileAndPal
@@ -100,12 +126,6 @@ SetupOther:
 
     ; if we were transitioning levels, unset the next level byte
     stz VWrdNextLvl
-    
-    ; remove!!! dbg only!!!
-    A16
-    stz VPlyData + TPlyData::px
-    stz VPlyData + TPlyData::py
-    A8
 
 SetupEnd:
     stz VFrameReady
@@ -144,7 +164,7 @@ SetupEnd:
 
     ; start at pal 1, 0
     WfvPal16Addr 1
-    ; copy normal map top palette to 1, 0
+    ; copy tileset top palette to 1, 0
     WfvDmaCopyOneRegOff CGDATA, AWorldTilesetAll_MetaTable + 0, $20
 
     ; set bg color
@@ -156,9 +176,15 @@ SetupEnd:
     stz CGDATA
     stz CGDATA
 
-    ; copy normal level tile data
+    ; copy tileset tile data
     WfvBgAddr $0000
     WfvDmaCopyTwoRegOff VMDATAL, AWorldTilesetAll_MetaTable + 3, AWorldTilesetAll_MetaTable + 9
+
+    ; copy tileset meta data
+    stz WMADDH
+    ldx #.loword(VTileMetaTable)
+    stx WMADDL
+    WfvDmaCopyOneRegOff WMDATA, AWorldTilesetAll_MetaTable + 6, 128 ; could be expanded to 256 later
 
     rts
 .endproc
@@ -388,10 +414,6 @@ LoadVramStagingIntoVram:
 
 ; SPRITE LOAD ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; LoadMapSpritesNpcs:
-;     .word .loword(A_OVERWORLD_LAYER1_LEVEL0_N)
-;     .word .loword(A_OVERWORLD_LAYER1_LEVEL1_N)
-
 LoadMapSprites_Zero: .word $0000
 
 ;; [inputs] none
@@ -469,7 +491,7 @@ LoadMapSprites_Zero: .word $0000
 ;; [outputs] none
 ;; [kills] a
 ;; [inlined]
-.proc UpdateInput
+.proc PfUpdateInput
     lastPad1Val = VScw0
 
     A16
@@ -667,7 +689,7 @@ GetStartingMapCoord2:
 
         bra SrcTileYOffDone
     SrcTileYOffTop:
-        ; srcTileYOff = ((VWrdCamTY - 0) * VWrdBoundW) << 1
+        ; srcTileYOff = ((VWrdCamTY - 1) * VWrdBoundW) << 1
         A8
         lda VWrdCamTY
         dec
@@ -827,7 +849,7 @@ CopyMapData2:
 ;; [outputs] none
 ;; [kills] axy
 ;; [inlined]
-.proc UpdateCamera
+.proc PfUpdateCamera
     newCamTileXY = VScw0
     tmp = VScw1
     flagsX = VScb0
@@ -844,7 +866,7 @@ CheckLoadNewTilesX:
     lda VWrdCamTX
     sta newCamTileXY
 
-    ; CAMT_X is based on -8 being the first index,
+    ; CamTX is based on -8 being the first index,
     ; so we add 8 so the unsigned compare works.
     lda VWrdCamTX
     clc
@@ -944,7 +966,7 @@ CheckLoadNewTilesY:
 ;; [inputs] none
 ;; [outputs] none
 ;; [kills] ax
-.proc RenderMap
+.proc PfRenderMap
 SetBgScroll:
     A16
     lda VWrdCamY
@@ -1080,7 +1102,7 @@ CopyTilesIfNeeded:
 ;; [inputs] none
 ;; [outputs] none
 ;; [kills] axy
-.proc RenderSceneTransition
+.proc PfRenderSceneTransition
     lda VWrdCamTime
     bne CamtimeRunning
         rts
@@ -1125,7 +1147,7 @@ CopyTilesIfNeeded:
 
 ; MAIN LOOP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-.proc DebugCamera
+.proc PfDebugCamera
     A16
     
     lda #JOY_LEFT
@@ -1197,17 +1219,17 @@ CopyTilesIfNeeded:
 .proc ModePfMainLoop
 MainLoopWait:
     ; === during vblank ===
-    jsr RenderMap
-    ; jsr RenderSprites
-    jsr RenderSceneTransition
+    jsr PfRenderMap
+    jsr PfRenderSprites
+    jsr PfRenderSceneTransition
     ; jsr RenderHud
 
     ; === during screen time ===
-    jsr UpdateInput
-    ; jsr UpdateSpritesBeforeCam
-    jsr DebugCamera
-    jsr UpdateCamera
-    ; jsr UpdateSpritesAfterCam
+    jsr PfUpdateInput
+    jsr PfUpdateSpritesBeforeCam
+    ; jsr PfDebugCamera
+    jsr PfUpdateCamera
+    jsr PfUpdateSpritesAfterCam
 
     ; wait for next frame
     stz VFrameReady

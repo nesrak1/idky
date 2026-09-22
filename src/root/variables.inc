@@ -103,7 +103,7 @@ TCharDataFlActive  = $40 ; sprite is being used
 ; SPRITES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .global VSprLo, VSprHi
 ; WORLD ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-.global VWrdStripCpyX, VWrdStripCpyY
+.global VWrdStripCpyX, VWrdStripCpyY, VTileMetaTable
 ; TEXT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .global VMsgBuffer
 ;

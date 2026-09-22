@@ -5,6 +5,9 @@ MAIN_PF_INC = 1
 
 .global PfZero
 
+.global ClipCameraX
+.global ClipCameraY
+
 CVramBg1Map   = $5000
 CVramBg2Map   = $5400
 CVramBg3Map   = $5800

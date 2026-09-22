@@ -18,6 +18,7 @@ OBJS = \
 	build/vn_text.o \
 	build/main_pf.o \
 	build/pf_asc.o \
+	build/pf_entity.o \
 	build/pf_npc.o
 
 all: $(ROM)
@@ -53,6 +54,7 @@ build/vn_char.o    : INC_FLAGS = -I src/waffle -I src/root -I assetgen
 build/vn_text.o    : INC_FLAGS = -I src/waffle -I src/root -I assetgen
 build/main_pf.o    : INC_FLAGS = -I src/waffle -I src/root -I assetgen
 build/pf_asc.o     : INC_FLAGS = -I src/waffle -I src/root -I assetgen
+build/pf_entity.o  : INC_FLAGS = -I src/waffle -I src/root -I assetgen
 build/pf_npc.o     : INC_FLAGS = -I src/waffle -I src/root -I assetgen
 
 -include $(OBJS:.o=.d)

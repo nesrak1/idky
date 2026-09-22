@@ -64,7 +64,7 @@ SetupStart:
     ; but eh, it works so why change it?
     WfvInterruptSetup
 
-SetupBG:
+SetupBg:
     ; see planning/memory-maps/mode-vn-v2.png for the layout
     ; we will have to do some trickery to get everything to
     ; fit in vram.
@@ -388,13 +388,13 @@ CCharIdx_space = 72
     lda #JOY_RIGHT
     trb VPad1Val
     beq NotMoveRight
-        inc VCharData + TCharData::cx + 0
+        inc VCharData + TCharData::cx
     NotMoveRight:
 
     lda #JOY_LEFT
     trb VPad1Val
     beq NotMoveLeft
-        dec VCharData + TCharData::cx + 0
+        dec VCharData + TCharData::cx
     NotMoveLeft:
 
     lda #JOY_B

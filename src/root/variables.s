@@ -169,9 +169,8 @@
     VWrdStripCpyX: .res 64  ; horizontal strips (left/right)
     VWrdStripCpyY: .res 64  ; vertical strips (up/down)
 
-    ; CHARACTERS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    ; 
+    ; tileset's meta table (collision type, liquid, damage, etc.)
+    VTileMetaTable: .res 256
 
     ; TEXT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
