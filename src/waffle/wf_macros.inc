@@ -75,6 +75,25 @@ WF_MACROS_INC = 1
     rep #$10
 .endmacro
 
+; Math ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+.macro signext
+    bit #$80
+    beq :+
+        ora #$FF00
+    :
+.endmacro
+
+.macro negate8
+    eor #$FF
+    inc
+.endmacro
+
+.macro negate16
+    eor #$FFFF
+    inc
+.endmacro
+
 ; Shift division ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .macro div2

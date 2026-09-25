@@ -1,6 +1,10 @@
 ASSET_INDEX = {
     # bank locations
-    "metadata": {"charbank": "MODEVN_CODE", "worldbank": "MODEPF_CODE"},
+    "metadata": {
+        "charbank": "MODEVN_CODE",
+        "worldbank": "MODEPF_CODE",
+        "entitybank": "MODEPF_CODE",
+    },
     # VN character sprites
     "chars": [
         {
@@ -42,6 +46,15 @@ ASSET_INDEX = {
             "lvid": 0,
             "map": "Ch0Lv0",
             "tileset": "ASpiritVoidTileset",
+        }
+    ],
+    # platformer entities
+    "entities": [
+        {
+            "name": "AutumnEnt",
+            "prefix": "AAutumnPlat0",
+            "bank": "MODEPF_AS_CHAR",
+            "image": "pf_autumn.png",
         }
     ],
     # various UI elements

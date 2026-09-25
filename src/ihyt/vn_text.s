@@ -504,7 +504,7 @@ VnChatCopyTilesToVram_JT:
 
 .proc VnChatCopyTilesToVram
     lda VMsgTileMode
-    shl
+    asl
     tax
     jmp (VnChatCopyTilesToVram_JT, X)
 .endproc

@@ -5,11 +5,12 @@ IHYT_VARS_INC = 1
 
 ; platformer player data
 .struct TPlyData
-    px .word         ; x position
-    py .word         ; y position
-    pvx .byte        ; x velocity
-    pvy .byte        ; y velocity
-    pvya .word       ; alternating y velocity (if 0, inc y once. if 1, inc y twice.)
+    pfx .byte        ; x position (fractional byte) ; +00
+    px .word         ; x position                   ; +01
+    pfy .byte        ; y position (fractional byte) ; +03
+    py .word         ; y position                   ; +04
+    pvx .word        ; x velocity                   ; +06
+    pvy .word        ; y velocity                   ; +08
     
     jmptime .byte    ; frames left that jump can be held
     jmpcnt  .byte    ; initial jumps used (reset to 0 when landing on ground)
@@ -21,7 +22,7 @@ IHYT_VARS_INC = 1
     hopdir .byte     ; dir for grab hop
     
     stamina .word    ; stamina amount (0-255)
-    health .byte     ; health amount (0-15)
+    dir .byte        ; sprite facing dir (0 left, 1 right)
     
     fl_pri .byte     ; non-zero if <PRI has disabled player input
 .endstruct

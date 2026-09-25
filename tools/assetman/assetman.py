@@ -80,6 +80,22 @@ class WorldEntry:
         self.tileset = typing.cast(str, bg_entry["tileset"])
 
 
+class EntityEntry:
+    def __init__(self, ent_entry: typing.Any):
+        # the entity's display name (also used for assetgen naming)
+        self.name = typing.cast(str, ent_entry["name"])
+        # the prefix to use (what to call this from assembly)
+        self.prefix = typing.cast(str, ent_entry["prefix"])
+        # the bank name to place this data in
+        self.bank = typing.cast(str, ent_entry["bank"])
+        # the image (16*n by 16 pixels, each frame side by side)
+        self.image = typing.cast(str, ent_entry["image"])
+
+        self.args: dict[str, str] = {}
+        if "args" in ent_entry:
+            self.args = typing.cast(dict[str, str], ent_entry["args"])
+
+
 class UiEntry:
     def __init__(self, ui_entry: typing.Any):
         self.name = typing.cast(str, ui_entry["name"])
@@ -165,6 +181,7 @@ class AssetManager:
         # the bank to place the directory tables in
         self.char_table_bank = "CODE"
         self.world_table_bank = "CODE"
+        self.entity_table_bank = "CODE"
 
         self.lines: list[str] = []
         self.inc_lines: list[str] = []
@@ -230,6 +247,8 @@ class AssetManager:
             self.char_table_bank = metadata["charbank"]
         if "worldbank" in metadata:
             self.world_table_bank = metadata["worldbank"]
+        if "entitybank" in metadata:
+            self.entity_table_bank = metadata["entitybank"]
 
         return True
 
@@ -508,6 +527,66 @@ class AssetManager:
 
         return True
 
+    def process_entities(self, entities_list: typing.Any) -> bool:
+        entities_path = self.assets_path / "entities"
+        entities_ag_path = self.assetgen_path / "entities"
+
+        entity_entries: list[EntityEntry] = [EntityEntry(ee) for ee in entities_list]
+        for entity_entry in entity_entries:
+            ag_name = entity_entry.name.lower().replace(" ", "_")
+            ag_workdir = entities_ag_path / ag_name
+            ag_workdir.mkdir(parents=True)
+
+            entity_name = Path(entity_entry.image).stem
+            entity_prefix = entity_entry.prefix
+
+            in_image_path = entities_path / entity_entry.image
+            out_pal_path = ag_workdir / (entity_name + ".pal")
+            out_til_path = ag_workdir / (entity_name + ".til")
+            conv_args = {
+                "-i": str(in_image_path),
+                "-p": str(out_pal_path),
+                "-t": str(out_til_path),
+                "-R": "",
+                "-D": "",
+                "-F": "",
+                "-S": "",
+                "-B": "4",
+                "-W": "16",
+                "-H": "16",
+            }
+
+            if entity_entry.args:
+                conv_args.update(entity_entry.args)
+
+            if not run_superfamiconv(self.tools_path, conv_args):
+                logging.error("superfamiconv returned an error, exiting now")
+                return False
+
+            self.add_header("Entity " + entity_entry.name)
+            self.add_segment(entity_entry.bank)
+
+            self.add_label(entity_prefix + "_Palette_P")
+            self.add_include(out_pal_path, True)
+            self.add_label(entity_prefix + "_Palette_PE")
+            self.add_label(entity_prefix + "_Tileset_T")
+            self.add_include(out_til_path, True)
+            self.add_label(entity_prefix + "_Tileset_TE")
+
+        self.add_header("Entity info data")
+        self.add_segment(self.entity_table_bank)
+        self.add_label("AEntityAll_MetaTable")
+        for entity_entry in entity_entries:
+            entity_prefix = entity_entry.prefix
+            self.lines.append(f"  {entity_prefix}_MetaTable:")
+            self.lines.append(f"  .faraddr {entity_prefix}_Palette_P")
+            self.lines.append(f"  .faraddr {entity_prefix}_Tileset_T")
+            self.lines.append(
+                f"  .word ({entity_prefix}_Tileset_TE - {entity_prefix}_Tileset_T)"
+            )
+
+        return True
+
     def process_ui(self, ui_list: typing.Any) -> bool:
         ui_path = self.assets_path / "ui"
         ui_ag_path = self.assetgen_path / "ui"
@@ -652,6 +731,10 @@ def main(args: list[str]):
         if "worlds" in asset_index:
             logging.info("Converting platformer world data...")
             if not man.process_worlds(asset_index["worlds"]):
+                break
+        if "entities" in asset_index:
+            logging.info("Converting platformer entity data...")
+            if not man.process_entities(asset_index["entities"]):
                 break
         if "ui" in asset_index:
             logging.info("Converting UI data...")

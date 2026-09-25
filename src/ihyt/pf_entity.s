@@ -62,6 +62,16 @@ UpdatePlayer_GrabJumpTableVy:
     tmp = VScw0
     allowHMove = VScb0
 
+    ; todo: the player really needs fractional positioning
+    ; but our world requires 16-bit coordinates!
+    ; what to do?
+    MoveSpeed = 400
+    FrictionSpeed = 25
+    GravitySpeed = 25
+    JumpSpeed = 600
+    TerminalSpeed = 800
+    MaxJumpTime = 20
+
     UpdatePlayerInput:
 
         ; disable input when pri flag set
@@ -77,22 +87,24 @@ UpdatePlayer_GrabJumpTableVy:
             sta VPlyData + TPlyData::hoptime
 
             asl
-            clc
-            adc VPlyData + TPlyData::hopdir
+            add VPlyData + TPlyData::hopdir
             ldx #0
             tax
 
+            ; pv# = UpdatePlayer_GrabJumpTableV#[(hoptime << 1) | hopdir] << 8
+
             lda UpdatePlayer_GrabJumpTableVx, X
-            sta VPlyData + TPlyData::pvx
+            sta VPlyData + TPlyData::pvx+1
+            stz VPlyData + TPlyData::pvx
             
             lda UpdatePlayer_GrabJumpTableVy, X
-            sta VPlyData + TPlyData::pvy
+            sta VPlyData + TPlyData::pvy+1
+            stz VPlyData + TPlyData::pvy
             
             lda VPad1Val+1
             bit #(JOY_RIGHT>>8)
             beq IsRightHopFalse
                 lda VPlyData + TPlyData::pvx
-                inc
                 inc
                 inc
                 sta VPlyData + TPlyData::pvx
@@ -134,6 +146,7 @@ UpdatePlayer_GrabJumpTableVy:
             stx VPlyData + TPlyData::stamina
 
             stz VPlyData + TPlyData::pvy
+            stz VPlyData + TPlyData::pvy+1
 
             lda VPlyData + TPlyData::grab
             sta VPlyData + TPlyData::oldgrab
@@ -182,16 +195,22 @@ UpdatePlayer_GrabJumpTableVy:
         beq IsAFalse
         ; must have started a jump
         lda VPlyData + TPlyData::jmpcnt
-        beq IsAFalse
+        ;
+        ; to only allow larger jumps on first jump:
+        cmp #1
+        bne IsAFalse
+        ; to allow larger jumps on any jump: (currently broken due to this allowing 3rd hops)
+        ; beq IsAFalse
+        ;
         ; must still have jump time left
         lda VPlyData + TPlyData::jmptime
-        cmp #6 ; this changes jump height
+        cmp #MaxJumpTime
         bge IsAFalse
             inc
             sta VPlyData + TPlyData::jmptime
 
-            lda #<-15
-            sta VPlyData + TPlyData::pvy
+            ldx #($10000-JumpSpeed)
+            stx VPlyData + TPlyData::pvy
         IsAFalse:
 
         ; initial jump handling
@@ -206,8 +225,8 @@ UpdatePlayer_GrabJumpTableVy:
             sta VPlyData + TPlyData::jmpcnt
             stz VPlyData + TPlyData::jmptime
 
-            lda #<-15
-            sta VPlyData + TPlyData::pvy
+            ldx #($10000-JumpSpeed)
+            stx VPlyData + TPlyData::pvy
         IsFirstAFalse:
 
     LeftRightMovement:
@@ -215,93 +234,109 @@ UpdatePlayer_GrabJumpTableVy:
         lda VPad1Val+1
         bit #(JOY_RIGHT>>8)
         beq IsRightFalse
-            lda #10
-            sta VPlyData + TPlyData::pvx
+            ldx #MoveSpeed
+            stx VPlyData + TPlyData::pvx
+
+            lda #1
+            sta VPlyData + TPlyData::dir
         IsRightFalse:
 
         lda VPad1Val+1
         bit #(JOY_LEFT>>8)
         beq IsLeftFalse
-            lda #<-9
-            sta VPlyData + TPlyData::pvx
+            ldx #($10000-MoveSpeed)
+            stx VPlyData + TPlyData::pvx
+
+            lda #0 ; not using stz for consistency
+            sta VPlyData + TPlyData::dir
         IsLeftFalse:
 
         lda allowHMove
         bne AllowedHMove
+            A16
             lda VPlyData + TPlyData::pvx
-            div2signed8
+            div2signed
             sta VPlyData + TPlyData::pvx
+            A8
         AllowedHMove:
 
     HorizontalMovement:
         A16
-        XY8
 
-        ldx VPlyData + TPlyData::pvx
-        txa
+        lda VPlyData + TPlyData::pvx
         beq XFrictionFinish
-        ; sign extend
-        bit #$80
-        beq :+
-            ora #$FF00
-        :
 
         cmp #$8000
         blt IsXNegativeFalse
-            inc
+            ; A = (A < -FrictionSpeed) ? (A + FrictionSpeed) ? 0
+            cmp #($10000-FrictionSpeed)
+            blt :+
+                lda #0
+                bra :++
+            :
+                add #FrictionSpeed
+            :
             bra XFrictionFinish
         IsXNegativeFalse:
-            dec
+            ; A = (A > FrictionSpeed) ? (A - FrictionSpeed) ? 0
+            cmp #(FrictionSpeed+1)
+            bge :+
+                lda #0
+                bra :++
+            :
+                sub #FrictionSpeed
+            :
         XFrictionFinish:
-        tax
-        stx VPlyData + TPlyData::pvx
+        sta VPlyData + TPlyData::pvx
 
-        div2signed
-        div2signed
-        add VPlyData + TPlyData::px
-        sta VPlyData + TPlyData::px
+        ; VPlyData.px += (VPlyData.pvx + 128) >> 8
+        add VPlyData + TPlyData::pfx
+        sta VPlyData + TPlyData::pfx
+        ;
+        A8
+        lda VPlyData + TPlyData::pvx+1
+        bpl XVelocityPositive
+            lda VPlyData + TPlyData::px+1
+            adc #$FF
+            sta VPlyData + TPlyData::px+1
+            bra XVelocityPositiveEnd
+        XVelocityPositive:
+            lda VPlyData + TPlyData::px+1
+            adc #0
+            sta VPlyData + TPlyData::px+1
+        XVelocityPositiveEnd:
+        A16
 
     VerticalMovement:
-        ldx VPlyData + TPlyData::pvy
-        txa
-        ; sign extend
-        bit #$80
-        beq :+
-            ora #$FF00
-        :
+        lda VPlyData + TPlyData::pvy
 
-        ldx VPlyData + TPlyData::pvya
-        beq IncVelOnce ; if 0, we only inc once
-            add #16
-            cmp #(16+16)
-            bge IsYTerminalTwiceFalse
-                inc
-                inc
-            IsYTerminalTwiceFalse:
+        ; add #TerminalSpeed
+        ; cmp #(TerminalSpeed * 2)
+        ; bge IsYTerminalTwiceFalse
+        add #GravitySpeed
+        ; IsYTerminalTwiceFalse:
+        ; sub #TerminalSpeed
 
-            ; pvya is 16-bit to make this slightly easier
-            dec VPlyData + TPlyData::pvya
-            jmp EndIncVelOnce
-        IncVelOnce:
-            add #16
-            cmp #(16+16)
-            bge IsYTerminalOnceFalse
-                inc
-            IsYTerminalOnceFalse:
+        sta VPlyData + TPlyData::pvy
 
-            inc VPlyData + TPlyData::pvya
-        EndIncVelOnce:
+        ; VPlyData.py += VPlyData.pvy.hibyte / 32
+        add VPlyData + TPlyData::pfy
+        sta VPlyData + TPlyData::pfy
+        ;
+        A8
+        lda VPlyData + TPlyData::pvy+1
+        bpl YVelocityPositive
+            lda VPlyData + TPlyData::py+1
+            adc #$FF
+            sta VPlyData + TPlyData::py+1
+            bra YVelocityPositiveEnd
+        YVelocityPositive:
+            lda VPlyData + TPlyData::py+1
+            adc #0
+            sta VPlyData + TPlyData::py+1
+        YVelocityPositiveEnd:
+        A16
 
-        sub #16
-        tax
-        stx VPlyData + TPlyData::pvy
-
-        div2signed
-        div2signed
-        add VPlyData + TPlyData::py
-        sta VPlyData + TPlyData::py
-
-    XY16
     ldx VPlyData + TPlyData::px
     ldy VPlyData + TPlyData::py
 
@@ -503,7 +538,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         sbc #8
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -514,7 +549,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         add #24
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -526,7 +561,7 @@ UpdatePlayer_GrabJumpTableVy:
         add tmp
         sub #8
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -593,7 +628,7 @@ UpdatePlayer_GrabJumpTableVy:
         A16
         lda inro_plyTileWy
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -604,7 +639,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         add #24
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -615,7 +650,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         add tmp
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -686,7 +721,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         sub #8
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -697,7 +732,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         add #24
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -709,7 +744,7 @@ UpdatePlayer_GrabJumpTableVy:
         add tmp
         sub #8
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -779,7 +814,7 @@ UpdatePlayer_GrabJumpTableVy:
         A16
         lda inro_plyTileWy
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -790,7 +825,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         add #24
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -801,7 +836,7 @@ UpdatePlayer_GrabJumpTableVy:
         lda inro_plyTileWy
         add tmp
         sta VPlyData + TPlyData::py
-        lda #3
+        lda #800
         sta VPlyData + TPlyData::pvy
 
         ResetJumpOnGround
@@ -921,12 +956,13 @@ HandleSolidTile:
             lda inro_plyTileWy
             sub #8
             sta VPlyData + TPlyData::py
-            lda #3
 
             ResetJumpOnGroundNoA
-            A8
 
+            lda #200
             sta VPlyData + TPlyData::pvy
+            A8
+            stz VPlyData + TPlyData::pfy
             rts
         HandleTileDownDone:
 
@@ -948,9 +984,9 @@ HandleSolidTile:
             lda inro_plyTileWy
             add #(16+8)
             sta VPlyData + TPlyData::py
-            lda #3
             A8
 
+            lda #0 ; ...
             sta VPlyData + TPlyData::pvy
             rts
         HandleTileUpDone:
@@ -974,11 +1010,13 @@ HandleSolidTile:
             sub #8
             sta VPlyData + TPlyData::px
             A8
+            stz VPlyData + TPlyData::pfx
 
             lda #1
             sta VPlyData + TPlyData::grab
 
             stz VPlyData + TPlyData::pvx
+            stz VPlyData + TPlyData::pvx+1
             rts
         HandleTileRightDone:
 
@@ -1001,15 +1039,15 @@ HandleSolidTile:
             add #(16+8)
             sta VPlyData + TPlyData::px
             A8
+            stz VPlyData + TPlyData::pfx
 
             lda #2
             sta VPlyData + TPlyData::grab
 
             stz VPlyData + TPlyData::pvx
-            ;; [fallthrough] rts
+            stz VPlyData + TPlyData::pvx+1
         HandleTileLeftDone:
     rts
-;
 .endproc
 
 ;; [assume] A8, XY16
@@ -1417,6 +1455,7 @@ OutOfScreenSpace:
         sta VSprHi+$00
         bra EndSetXFlagFalse
     SetXFlagFalse:
+        .a16
         A8
         lda VSprHi+$00
         ora #%00000010
@@ -1428,9 +1467,17 @@ OutOfScreenSpace:
     stx VSprLo+$00 ; x pos
     sty VSprLo+$01 ; y pos
     XY16
-
+    
     stz VSprLo+$02 ; tile number
-    lda #%00100000 ; attributes (palette 0, priority 1, no flip)
+    
+    lda VPlyData + TPlyData::dir
+    beq PlayerFacingLeft
+        lda #%00100000 ; attributes (palette 0, priority 1, no flip)
+        bra EndPlayerFacingLeft
+    PlayerFacingLeft:
+        lda #%01100000 ; attributes (palette 0, priority 1, flip)
+    EndPlayerFacingLeft:
+    ;
     sta VSprLo+$03
 
     rts

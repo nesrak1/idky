@@ -346,7 +346,7 @@ VnCharResetWord:
             ; spriteLargeProps = (0b00100000 | (cgram_pal << 1) | 0)
             ; spriteSmallProps = (0b00100000 | (cgram_pal << 1) | 0)
             lda a:VCharData + TCharData::cgram_pal, X
-            shl
+            asl
             eor #%00100000
             sta a:spriteLargeProps
             sta a:spriteSmallProps
@@ -356,7 +356,7 @@ VnCharResetWord:
             ; spriteLargeProps = (0b00100000 | (cgram_pal << 1) | 1)
             ; spriteSmallProps = (0b00100000 | (cgram_pal << 1) | 1)
             lda a:VCharData + TCharData::cgram_pal, X
-            shl
+            asl
             eor #%00100001
             sta a:spriteLargeProps
             and #%11111110

@@ -74,18 +74,20 @@ SetupPlayerPos:
 
         ldx VWrdNextX
         stx VPlyData + TPlyData::px
+        stz VPlyData + TPlyData::pfx
 
         ldx VWrdNextY
         stx VPlyData + TPlyData::py
+        stz VPlyData + TPlyData::pfy
 
         ldx #0
-        stx VPlyData + TPlyData::pvx ; + TPlyData::pvy
-        stx VPlyData + TPlyData::pvya
+        stx VPlyData + TPlyData::pvx
+        stx VPlyData + TPlyData::pvy
         stx VPlyData + TPlyData::jmptime ; + TPlyData::jmpcnt
         stx VPlyData + TPlyData::grab ; + TPlyData::oldgrab
         stx VPlyData + TPlyData::hoptime ; + TPlyData::hopdir
-        stx VPlyData + TPlyData::stamina ; + TPlyData::health
-        stz VPlyData + TPlyData::fl_pri
+        stx VPlyData + TPlyData::stamina
+        stx VPlyData + TPlyData::dir ; + fl_pri
     NotSettingPlayerPos:
 
 SetupStart:
@@ -121,6 +123,11 @@ SetupBg:
     jsr PfLoadMapTileAndPal
     jsr PfLoadMap
     jsr PfLoadMapSprites
+
+SetupSprites:
+
+    ; OBJSEL = start sprite tileset at $4000 (will reposition to $6000 with HDMA)
+    WfvSpriteConfig SpriteCfgSize::SZ_8x8_16x16, CVramSprites, SpriteCfgGap::NO_GAP
 
 SetupOther:
 
@@ -443,13 +450,17 @@ LoadMapSprites_Zero: .word $0000
         dey
     bne SetSpriteYOffscreenLoop
 
-    ; ; copy player/npc palettes
+    ; copy player/npc palettes
+    WfvPal16Addr 8
+    WfvPalLoad AAutumnPlat0_Palette_P, $20 ; overshooting the size is fine
     ; lda #$80
     ; sta CGADD
     ; BGDmaCopyOnereg CGDATA, AOverworldCharsP, $20
     ; BGDmaCopyOnereg CGDATA, AOverworldMitatP, $20
     ; ;
-    ; ; copy player/npc tiles
+    ; copy player/npc tiles
+    WfvBgAddr CVramSprites
+    WfvBgLoad AAutumnPlat0_Tileset_T, (AAutumnPlat0_Tileset_TE - AAutumnPlat0_Tileset_T)
     ; lda #$80
     ; sta VMAIN
     ; ldx #$2000
