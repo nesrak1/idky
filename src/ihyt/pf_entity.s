@@ -20,39 +20,29 @@
 ; SPRITE UPDATE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 UpdatePlayer_GrabJumpTableVx:
-    .byte $FC, $05
-    .byte $FB, $06
-    .byte $FB, $06
-    .byte $FB, $06
-    .byte $FA, $07
-    .byte $FA, $07
-    .byte $FA, $07
-    .byte $F9, $08
-    .byte $F9, $08
-    .byte $F9, $08
-    .byte $F8, $09
-    .byte $F8, $09
-    .byte $F8, $09
-    .byte $F7, $0A
-    .byte $F7, $0A
-    .byte $F7, $0A
+    .byte $FF, $01
+    .byte $FF, $01
+    .byte $FF, $01
+    .byte $FE, $02
+    .byte $FE, $02
+    .byte $FE, $02
+    .byte $FE, $02
+    .byte $FE, $02
+    .byte $FE, $02
+    .byte $FD, $03
+    .byte $FD, $03
 UpdatePlayer_GrabJumpTableVy:
-    .byte $FA, $FA
-    .byte $F9, $F9
-    .byte $F8, $F8
-    .byte $F7, $F7
-    .byte $F6, $F6
-    .byte $F6, $F6
-    .byte $F5, $F5
-    .byte $F5, $F5
-    .byte $F4, $F4
-    .byte $F4, $F4
-    .byte $F3, $F3
-    .byte $F3, $F3
-    .byte $F2, $F2
-    .byte $F2, $F2
-    .byte $F1, $F1
-    .byte $F1, $F1
+    .byte $FF, $FF
+    .byte $FF, $FF
+    .byte $FF, $FF
+    .byte $FE, $FE
+    .byte $FE, $FE
+    .byte $FE, $FE
+    .byte $FE, $FE
+    .byte $FE, $FE
+    .byte $FE, $FE
+    .byte $FD, $FD
+    .byte $FD, $FD
 
 ;; [inputs] none
 ;; [outputs] none
@@ -62,15 +52,13 @@ UpdatePlayer_GrabJumpTableVy:
     tmp = VScw0
     allowHMove = VScb0
 
-    ; todo: the player really needs fractional positioning
-    ; but our world requires 16-bit coordinates!
-    ; what to do?
     MoveSpeed = 400
     FrictionSpeed = 25
     GravitySpeed = 25
     JumpSpeed = 600
     TerminalSpeed = 800
     MaxJumpTime = 20
+    MaxHopTime = 20
 
     UpdatePlayerInput:
 
@@ -85,8 +73,9 @@ UpdatePlayer_GrabJumpTableVy:
         beq IsHoppingFalse
             dec
             sta VPlyData + TPlyData::hoptime
+            div2
+            mul2
 
-            asl
             add VPlyData + TPlyData::hopdir
             ldx #0
             tax
@@ -101,23 +90,25 @@ UpdatePlayer_GrabJumpTableVy:
             sta VPlyData + TPlyData::pvy+1
             stz VPlyData + TPlyData::pvy
             
-            lda VPad1Val+1
-            bit #(JOY_RIGHT>>8)
-            beq IsRightHopFalse
-                lda VPlyData + TPlyData::pvx
-                inc
-                inc
-                sta VPlyData + TPlyData::pvx
-            IsRightHopFalse:
+            ; lda VPad1Val+1
+            ; bit #(JOY_RIGHT>>8)
+            ; beq IsRightHopFalse
+            ;     A16
+            ;     lda VPlyData + TPlyData::pvx
+            ;     add #(MoveSpeed*3)
+            ;     sta VPlyData + TPlyData::pvx
+            ;     A8
+            ; IsRightHopFalse:
             
-            lda VPad1Val+1
-            bit #(JOY_LEFT>>8)
-            beq IsLeftHopFalse
-                lda VPlyData + TPlyData::pvx
-                dec
-                dec
-                sta VPlyData + TPlyData::pvx
-            IsLeftHopFalse:
+            ; lda VPad1Val+1
+            ; bit #(JOY_LEFT>>8)
+            ; beq IsLeftHopFalse
+            ;     A16
+            ;     lda VPlyData + TPlyData::pvx
+            ;     sub #(MoveSpeed*3)
+            ;     sta VPlyData + TPlyData::pvx
+            ;     A8
+            ; IsLeftHopFalse:
 
             ; skip all other inputs
             jmp LeftRightMovement
@@ -145,8 +136,8 @@ UpdatePlayer_GrabJumpTableVy:
             dex
             stx VPlyData + TPlyData::stamina
 
-            stz VPlyData + TPlyData::pvy
-            stz VPlyData + TPlyData::pvy+1
+            ldx #($10000-GravitySpeed)
+            stx VPlyData + TPlyData::pvy
 
             lda VPlyData + TPlyData::grab
             sta VPlyData + TPlyData::oldgrab
@@ -165,7 +156,7 @@ UpdatePlayer_GrabJumpTableVy:
             dec
             sta VPlyData + TPlyData::hopdir
 
-            lda #10
+            lda #MaxHopTime
             sta VPlyData + TPlyData::hoptime
 
             stz VPlyData + TPlyData::jmptime
@@ -289,7 +280,7 @@ UpdatePlayer_GrabJumpTableVy:
         XFrictionFinish:
         sta VPlyData + TPlyData::pvx
 
-        ; VPlyData.px += (VPlyData.pvx + 128) >> 8
+        ; VPlyData.px += VPlyData.pvx.hibyte
         add VPlyData + TPlyData::pfx
         sta VPlyData + TPlyData::pfx
         ;
@@ -319,7 +310,7 @@ UpdatePlayer_GrabJumpTableVy:
 
         sta VPlyData + TPlyData::pvy
 
-        ; VPlyData.py += VPlyData.pvy.hibyte / 32
+        ; VPlyData.py += VPlyData.pvy.hibyte
         add VPlyData + TPlyData::pfy
         sta VPlyData + TPlyData::pfy
         ;
