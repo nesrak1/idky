@@ -126,7 +126,7 @@ SetupBg:
 
 SetupSprites:
 
-    ; OBJSEL = start sprite tileset at $4000 (will reposition to $6000 with HDMA)
+    ; OBJSEL = start sprite tileset at $6000
     WfvSpriteConfig SpriteCfgSize::SZ_8x8_16x16, CVramSprites, SpriteCfgGap::NO_GAP
 
 SetupOther:
