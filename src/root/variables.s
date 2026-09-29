@@ -96,6 +96,8 @@
     VWrdCurLvl: .res 1
     VWrdNextX: .res 2
     VWrdNextY: .res 2
+    VWrdEffect: .res 1
+    VWrdRsvd: .res 1
 
     ; PLAYER ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

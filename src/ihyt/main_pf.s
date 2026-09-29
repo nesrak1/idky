@@ -42,6 +42,8 @@ ModePfResetNext:
     lda #240
     sta VWrdNextY
 
+    stz VWrdEffect ; + VWrdRsvd
+
     stz VFlags + 0
     stz VFlags + 2
     stz VFlags + 4
@@ -59,6 +61,234 @@ ModePfResetNext:
 
 PfZero:
     .word $0000
+
+;         TIME|W1L |W1R |W2L |W2R
+DarkLightHdmaTable:
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $80, $80, $FF, $00
+    .byte $01, $72, $8E, $FF, $00
+    .byte $01, $6D, $93, $FF, $00
+    .byte $01, $68, $98, $FF, $00
+    .byte $01, $64, $9C, $FF, $00
+    .byte $01, $61, $9F, $FF, $00
+    .byte $01, $5E, $A2, $FF, $00
+    .byte $01, $5C, $A4, $FF, $00
+    .byte $01, $59, $A7, $FF, $00
+    .byte $01, $57, $A9, $FF, $00
+    .byte $01, $55, $AB, $FF, $00
+    .byte $01, $53, $AD, $FF, $00
+    .byte $01, $51, $AF, $FF, $00
+    .byte $01, $4F, $B1, $FF, $00
+    .byte $01, $4D, $B3, $FF, $00
+    .byte $01, $4C, $B4, $FF, $00
+    .byte $01, $4A, $B6, $FF, $00
+    .byte $01, $49, $B7, $FF, $00
+    .byte $01, $47, $B9, $FF, $00
+    .byte $01, $46, $BA, $FF, $00
+    .byte $01, $44, $BC, $FF, $00
+    .byte $01, $43, $BD, $FF, $00
+    .byte $01, $42, $BE, $FF, $00
+    .byte $01, $41, $BF, $FF, $00
+    .byte $01, $40, $C0, $FF, $00
+    .byte $01, $3E, $C2, $FF, $00
+    .byte $01, $3D, $C3, $FF, $00
+    .byte $01, $3C, $C4, $FF, $00
+    .byte $01, $3B, $C5, $FF, $00
+    .byte $01, $3A, $C6, $FF, $00
+    .byte $01, $39, $C7, $FF, $00
+    .byte $01, $38, $C8, $FF, $00
+    .byte $01, $37, $C9, $FF, $00
+    .byte $01, $36, $CA, $FF, $00
+    .byte $01, $35, $CB, $FF, $00
+    .byte $01, $35, $CB, $FF, $00
+    .byte $01, $34, $CC, $FF, $00
+    .byte $01, $33, $CD, $FF, $00
+    .byte $01, $32, $CE, $FF, $00
+    .byte $01, $31, $CF, $FF, $00
+    .byte $01, $30, $D0, $FF, $00
+    .byte $01, $30, $D0, $FF, $00
+    .byte $01, $2F, $D1, $FF, $00
+    .byte $01, $2E, $D2, $FF, $00
+    .byte $01, $2E, $D2, $FF, $00
+    .byte $01, $2D, $D3, $FF, $00
+    .byte $01, $2C, $D4, $FF, $00
+    .byte $01, $2C, $D4, $FF, $00
+    .byte $01, $2B, $D5, $FF, $00
+    .byte $01, $2A, $D6, $FF, $00
+    .byte $01, $2A, $D6, $80, $80
+    .byte $01, $29, $D7, $77, $89
+    .byte $01, $29, $D7, $72, $8E
+    .byte $01, $28, $D8, $6F, $91
+    .byte $01, $28, $D8, $6D, $93
+    .byte $01, $27, $D9, $6B, $95
+    .byte $01, $27, $D9, $69, $97
+    .byte $01, $26, $DA, $67, $99
+    .byte $01, $26, $DA, $65, $9B
+    .byte $01, $25, $DB, $64, $9C
+    .byte $01, $25, $DB, $62, $9E
+    .byte $01, $24, $DC, $61, $9F
+    .byte $01, $24, $DC, $60, $A0
+    .byte $01, $24, $DC, $5F, $A1
+    .byte $01, $23, $DD, $5E, $A2
+    .byte $01, $23, $DD, $5D, $A3
+    .byte $01, $22, $DE, $5C, $A4
+    .byte $01, $22, $DE, $5B, $A5
+    .byte $01, $22, $DE, $5A, $A6
+    .byte $01, $21, $DF, $59, $A7
+    .byte $01, $21, $DF, $58, $A8
+    .byte $01, $21, $DF, $58, $A8
+    .byte $01, $20, $E0, $57, $A9
+    .byte $01, $20, $E0, $56, $AA
+    .byte $01, $20, $E0, $56, $AA
+    .byte $01, $20, $E0, $55, $AB
+    .byte $01, $1F, $E1, $55, $AB
+    .byte $01, $1F, $E1, $54, $AC
+    .byte $01, $1F, $E1, $54, $AC
+    .byte $01, $1F, $E1, $53, $AD
+    .byte $01, $1F, $E1, $53, $AD
+    .byte $01, $1E, $E2, $52, $AE
+    .byte $01, $1E, $E2, $52, $AE
+    .byte $01, $1E, $E2, $51, $AF
+    .byte $01, $1E, $E2, $51, $AF
+    .byte $01, $1E, $E2, $51, $AF
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1C, $E4, $4E, $B2
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $4F, $B1
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1D, $E3, $50, $B0
+    .byte $01, $1E, $E2, $51, $AF
+    .byte $01, $1E, $E2, $51, $AF
+    .byte $01, $1E, $E2, $51, $AF
+    .byte $01, $1E, $E2, $52, $AE
+    .byte $01, $1E, $E2, $52, $AE
+    .byte $01, $1F, $E1, $53, $AD
+    .byte $01, $1F, $E1, $53, $AD
+    .byte $01, $1F, $E1, $54, $AC
+    .byte $01, $1F, $E1, $54, $AC
+    .byte $01, $1F, $E1, $55, $AB
+    .byte $01, $20, $E0, $55, $AB
+    .byte $01, $20, $E0, $56, $AA
+    .byte $01, $20, $E0, $56, $AA
+    .byte $01, $20, $E0, $57, $A9
+    .byte $01, $21, $DF, $58, $A8
+    .byte $01, $21, $DF, $58, $A8
+    .byte $01, $21, $DF, $59, $A7
+    .byte $01, $22, $DE, $5A, $A6
+    .byte $01, $22, $DE, $5B, $A5
+    .byte $01, $22, $DE, $5C, $A4
+    .byte $01, $23, $DD, $5D, $A3
+    .byte $01, $23, $DD, $5E, $A2
+    .byte $01, $24, $DC, $5F, $A1
+    .byte $01, $24, $DC, $60, $A0
+    .byte $01, $24, $DC, $61, $9F
+    .byte $01, $25, $DB, $62, $9E
+    .byte $01, $25, $DB, $64, $9C
+    .byte $01, $26, $DA, $65, $9B
+    .byte $01, $26, $DA, $67, $99
+    .byte $01, $27, $D9, $69, $97
+    .byte $01, $27, $D9, $6B, $95
+    .byte $01, $28, $D8, $6D, $93
+    .byte $01, $28, $D8, $6F, $91
+    .byte $01, $29, $D7, $72, $8E
+    .byte $01, $29, $D7, $77, $89
+    .byte $01, $2A, $D6, $80, $80
+    .byte $01, $2A, $D6, $FF, $00
+    .byte $01, $2B, $D5, $FF, $00
+    .byte $01, $2C, $D4, $FF, $00
+    .byte $01, $2C, $D4, $FF, $00
+    .byte $01, $2D, $D3, $FF, $00
+    .byte $01, $2E, $D2, $FF, $00
+    .byte $01, $2E, $D2, $FF, $00
+    .byte $01, $2F, $D1, $FF, $00
+    .byte $01, $30, $D0, $FF, $00
+    .byte $01, $30, $D0, $FF, $00
+    .byte $01, $31, $CF, $FF, $00
+    .byte $01, $32, $CE, $FF, $00
+    .byte $01, $33, $CD, $FF, $00
+    .byte $01, $34, $CC, $FF, $00
+    .byte $01, $35, $CB, $FF, $00
+    .byte $01, $35, $CB, $FF, $00
+    .byte $01, $36, $CA, $FF, $00
+    .byte $01, $37, $C9, $FF, $00
+    .byte $01, $38, $C8, $FF, $00
+    .byte $01, $39, $C7, $FF, $00
+    .byte $01, $3A, $C6, $FF, $00
+    .byte $01, $3B, $C5, $FF, $00
+    .byte $01, $3C, $C4, $FF, $00
+    .byte $01, $3D, $C3, $FF, $00
+    .byte $01, $3E, $C2, $FF, $00
+    .byte $01, $40, $C0, $FF, $00
+    .byte $01, $41, $BF, $FF, $00
+    .byte $01, $42, $BE, $FF, $00
+    .byte $01, $43, $BD, $FF, $00
+    .byte $01, $44, $BC, $FF, $00
+    .byte $01, $46, $BA, $FF, $00
+    .byte $01, $47, $B9, $FF, $00
+    .byte $01, $49, $B7, $FF, $00
+    .byte $01, $4A, $B6, $FF, $00
+    .byte $01, $4C, $B4, $FF, $00
+    .byte $01, $4D, $B3, $FF, $00
+    .byte $01, $4F, $B1, $FF, $00
+    .byte $01, $51, $AF, $FF, $00
+    .byte $01, $53, $AD, $FF, $00
+    .byte $01, $55, $AB, $FF, $00
+    .byte $01, $57, $A9, $FF, $00
+    .byte $01, $59, $A7, $FF, $00
+    .byte $01, $5C, $A4, $FF, $00
+    .byte $01, $5E, $A2, $FF, $00
+    .byte $01, $61, $9F, $FF, $00
+    .byte $01, $64, $9C, $FF, $00
+    .byte $01, $68, $98, $FF, $00
+    .byte $01, $6D, $93, $FF, $00
+    .byte $01, $72, $8E, $FF, $00
+    .byte $01, $80, $80, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $01, $FF, $00, $FF, $00
+    .byte $00 ; End of HDMA table
 
 ;; [inputs] ?
 ;; [outputs] ?
@@ -119,10 +349,44 @@ SetupBg:
     ; TMAIN = enable BG1, ~~BG2~~, ~~BG3~~, and sprites
     lda #%00010001
     sta TMAIN
+    stz TSUB
 
     jsr PfLoadMapTileAndPal
     jsr PfLoadMap
     jsr PfLoadMapSprites
+
+SetupHdmaEffects:
+
+    lda #%00000000
+    sta W12SEL
+    lda #%00000001
+    sta TMW
+    stz TSW
+
+    lda #%00000000
+    sta WOBJSEL
+    lda #%00000000
+    sta WOBJLOG
+
+    lda #%00100000
+    sta CGWSEL
+    lda #%01000000
+    sta CGADSUB
+
+    lda #%11100000
+    sta COLDATA
+
+    lda #$04 ; +0, +1, +2, +3 (W1L to W2R)
+    sta DMAP6
+    lda #<W1L
+    sta DMADEST6
+    ldx #.loword(DarkLightHdmaTable)
+    stx DMASRC6L
+    lda #^DarkLightHdmaTable
+    sta DMASRC6B
+
+    lda #%00000000
+    sta HDMAEN
 
 SetupSprites:
 
@@ -496,12 +760,46 @@ LoadMapSprites_Zero: .word $0000
 
 ;
 
+; EFFECTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; [inputs] none
+;; [outputs] none
+;; [kills] a
+.proc PfChangeWorldEffect
+    lda VWrdEffect
+    cmp #1
+    bne NotDarkEffect
+        lda #%00000011
+        sta W12SEL
+        lda #%10000000
+        sta WOBJSEL
+        lda #%01000001
+        sta CGADSUB
+        lda #%01000000
+        sta HDMAEN
+        rts
+    NotDarkEffect:
+        lda #%00000000
+        sta W12SEL
+        lda #%00000000
+        sta WOBJSEL
+        lda #%01000000
+        sta CGADSUB
+        lda #%00000000
+        sta HDMAEN
+        rts
+    EndNotDarkEffect:
+.endproc
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;
+
 ; LOOP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; [inputs] none
 ;; [outputs] none
 ;; [kills] a
-;; [inlined]
 .proc PfUpdateInput
     lastPad1Val = VScw0
 
@@ -1158,66 +1456,77 @@ CopyTilesIfNeeded:
 
 ; MAIN LOOP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-.proc PfDebugCamera
+.proc PfDebugControls
     A16
-    
-    lda #JOY_LEFT
-    trb VPad1Val
-    beq NotMoveLeft
-        dec VPlyData + TPlyData::px
-        dec VPlyData + TPlyData::px
-        dec VPlyData + TPlyData::px
-    NotMoveLeft:
-    
-    lda #JOY_RIGHT
-    trb VPad1Val
-    beq NotMoveRight
-        inc VPlyData + TPlyData::px
-        inc VPlyData + TPlyData::px
-        inc VPlyData + TPlyData::px
-    NotMoveRight:
-    
-    lda #JOY_UP
-    trb VPad1Val
-    beq NotMoveUp
-        dec VPlyData + TPlyData::py
-        dec VPlyData + TPlyData::py
-        dec VPlyData + TPlyData::py
-    NotMoveUp:
-    
-    lda #JOY_DOWN
-    trb VPad1Val
-    beq NotMoveDown
-        inc VPlyData + TPlyData::py
-        inc VPlyData + TPlyData::py
-        inc VPlyData + TPlyData::py
-    NotMoveDown:
 
-    ldx VPlyData + TPlyData::px
-    ldy VPlyData + TPlyData::py
+    lda #JOY_Y
+    trb VPad1Fir
+    beq NotPressY
+        A8Zero
+        lda VWrdEffect
+        eor #1
+        sta VWrdEffect
+        jsr PfChangeWorldEffect
+        A16
+    NotPressY:
+    
+    ; lda #JOY_LEFT
+    ; trb VPad1Val
+    ; beq NotMoveLeft
+    ;     dec VPlyData + TPlyData::px
+    ;     dec VPlyData + TPlyData::px
+    ;     dec VPlyData + TPlyData::px
+    ; NotMoveLeft:
+    
+    ; lda #JOY_RIGHT
+    ; trb VPad1Val
+    ; beq NotMoveRight
+    ;     inc VPlyData + TPlyData::px
+    ;     inc VPlyData + TPlyData::px
+    ;     inc VPlyData + TPlyData::px
+    ; NotMoveRight:
+    
+    ; lda #JOY_UP
+    ; trb VPad1Val
+    ; beq NotMoveUp
+    ;     dec VPlyData + TPlyData::py
+    ;     dec VPlyData + TPlyData::py
+    ;     dec VPlyData + TPlyData::py
+    ; NotMoveUp:
+    
+    ; lda #JOY_DOWN
+    ; trb VPad1Val
+    ; beq NotMoveDown
+    ;     inc VPlyData + TPlyData::py
+    ;     inc VPlyData + TPlyData::py
+    ;     inc VPlyData + TPlyData::py
+    ; NotMoveDown:
 
-    UpdateCameraPosition:
-        jsr ClipCameraX
-        sub #128
-        sub VWrdCamX
-        div2signed
-        div2signed
-        div2signed
-        add VWrdCamX
-        sta VWrdCamX
-        and #$0F
-        sta VWrdCamPX
+    ; ldx VPlyData + TPlyData::px
+    ; ldy VPlyData + TPlyData::py
 
-        jsr ClipCameraY
-        sub #112
-        sub VWrdCamY
-        div2signed
-        div2signed
-        div2signed
-        add VWrdCamY
-        sta VWrdCamY
-        and #$0F
-        sta VWrdCamPY
+    ; UpdateCameraPosition:
+    ;     jsr ClipCameraX
+    ;     sub #128
+    ;     sub VWrdCamX
+    ;     div2signed
+    ;     div2signed
+    ;     div2signed
+    ;     add VWrdCamX
+    ;     sta VWrdCamX
+    ;     and #$0F
+    ;     sta VWrdCamPX
+
+    ;     jsr ClipCameraY
+    ;     sub #112
+    ;     sub VWrdCamY
+    ;     div2signed
+    ;     div2signed
+    ;     div2signed
+    ;     add VWrdCamY
+    ;     sta VWrdCamY
+    ;     and #$0F
+    ;     sta VWrdCamPY
 
     A8Zero
     rts
@@ -1238,7 +1547,7 @@ MainLoopWait:
     ; === during screen time ===
     jsr PfUpdateInput
     jsr PfUpdateSpritesBeforeCam
-    ; jsr PfDebugCamera
+    jsr PfDebugControls
     jsr PfUpdateCamera
     jsr PfUpdateSpritesAfterCam
 

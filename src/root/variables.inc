@@ -84,7 +84,7 @@ TCharDataFlActive  = $40 ; sprite is being used
 .globalzp VWrdCamTX, VWrdCamTY, VWrdCamOX, VWrdCamOY
 .globalzp VWrdCamVsX, VWrdCamVsY, VWrdCamVRdy
 .globalzp VWrdCamTime, VWrdNextLvl, VWrdCurLvl
-.globalzp VWrdNextX, VWrdNextY
+.globalzp VWrdNextX, VWrdNextY, VWrdEffect, VWrdRsvd
 ; PLAYER ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .globalzp VPlyData
 ; VISUAL NOVEL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
