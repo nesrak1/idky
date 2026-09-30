@@ -174,6 +174,12 @@
     ; tileset's meta table (collision type, liquid, damage, etc.)
     VTileMetaTable: .res 256
 
+    ; using the double buffering method. we have two copies, alternating between A and B
+    VEffectLightA: .res (224 * 4) ; 896 bytes
+    VEffectLightB: .res (224 * 4) ; 896 bytes
+    VEffectHdmaIndex: .res 1
+    VEffectRsvd: .res 1
+
     ; TEXT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     ; TODO: we are replacing a lot of this!!!!

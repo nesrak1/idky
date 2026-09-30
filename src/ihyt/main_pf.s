@@ -62,233 +62,246 @@ ModePfResetNext:
 PfZero:
     .word $0000
 
-;         TIME|W1L |W1R |W2L |W2R
-DarkLightHdmaTable:
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $80, $80, $FF, $00
-    .byte $01, $72, $8E, $FF, $00
-    .byte $01, $6D, $93, $FF, $00
-    .byte $01, $68, $98, $FF, $00
-    .byte $01, $64, $9C, $FF, $00
-    .byte $01, $61, $9F, $FF, $00
-    .byte $01, $5E, $A2, $FF, $00
-    .byte $01, $5C, $A4, $FF, $00
-    .byte $01, $59, $A7, $FF, $00
-    .byte $01, $57, $A9, $FF, $00
-    .byte $01, $55, $AB, $FF, $00
-    .byte $01, $53, $AD, $FF, $00
-    .byte $01, $51, $AF, $FF, $00
-    .byte $01, $4F, $B1, $FF, $00
-    .byte $01, $4D, $B3, $FF, $00
-    .byte $01, $4C, $B4, $FF, $00
-    .byte $01, $4A, $B6, $FF, $00
-    .byte $01, $49, $B7, $FF, $00
-    .byte $01, $47, $B9, $FF, $00
-    .byte $01, $46, $BA, $FF, $00
-    .byte $01, $44, $BC, $FF, $00
-    .byte $01, $43, $BD, $FF, $00
-    .byte $01, $42, $BE, $FF, $00
-    .byte $01, $41, $BF, $FF, $00
-    .byte $01, $40, $C0, $FF, $00
-    .byte $01, $3E, $C2, $FF, $00
-    .byte $01, $3D, $C3, $FF, $00
-    .byte $01, $3C, $C4, $FF, $00
-    .byte $01, $3B, $C5, $FF, $00
-    .byte $01, $3A, $C6, $FF, $00
-    .byte $01, $39, $C7, $FF, $00
-    .byte $01, $38, $C8, $FF, $00
-    .byte $01, $37, $C9, $FF, $00
-    .byte $01, $36, $CA, $FF, $00
-    .byte $01, $35, $CB, $FF, $00
-    .byte $01, $35, $CB, $FF, $00
-    .byte $01, $34, $CC, $FF, $00
-    .byte $01, $33, $CD, $FF, $00
-    .byte $01, $32, $CE, $FF, $00
-    .byte $01, $31, $CF, $FF, $00
-    .byte $01, $30, $D0, $FF, $00
-    .byte $01, $30, $D0, $FF, $00
-    .byte $01, $2F, $D1, $FF, $00
-    .byte $01, $2E, $D2, $FF, $00
-    .byte $01, $2E, $D2, $FF, $00
-    .byte $01, $2D, $D3, $FF, $00
-    .byte $01, $2C, $D4, $FF, $00
-    .byte $01, $2C, $D4, $FF, $00
-    .byte $01, $2B, $D5, $FF, $00
-    .byte $01, $2A, $D6, $FF, $00
-    .byte $01, $2A, $D6, $80, $80
-    .byte $01, $29, $D7, $77, $89
-    .byte $01, $29, $D7, $72, $8E
-    .byte $01, $28, $D8, $6F, $91
-    .byte $01, $28, $D8, $6D, $93
-    .byte $01, $27, $D9, $6B, $95
-    .byte $01, $27, $D9, $69, $97
-    .byte $01, $26, $DA, $67, $99
-    .byte $01, $26, $DA, $65, $9B
-    .byte $01, $25, $DB, $64, $9C
-    .byte $01, $25, $DB, $62, $9E
-    .byte $01, $24, $DC, $61, $9F
-    .byte $01, $24, $DC, $60, $A0
-    .byte $01, $24, $DC, $5F, $A1
-    .byte $01, $23, $DD, $5E, $A2
-    .byte $01, $23, $DD, $5D, $A3
-    .byte $01, $22, $DE, $5C, $A4
-    .byte $01, $22, $DE, $5B, $A5
-    .byte $01, $22, $DE, $5A, $A6
-    .byte $01, $21, $DF, $59, $A7
-    .byte $01, $21, $DF, $58, $A8
-    .byte $01, $21, $DF, $58, $A8
-    .byte $01, $20, $E0, $57, $A9
-    .byte $01, $20, $E0, $56, $AA
-    .byte $01, $20, $E0, $56, $AA
-    .byte $01, $20, $E0, $55, $AB
-    .byte $01, $1F, $E1, $55, $AB
-    .byte $01, $1F, $E1, $54, $AC
-    .byte $01, $1F, $E1, $54, $AC
-    .byte $01, $1F, $E1, $53, $AD
-    .byte $01, $1F, $E1, $53, $AD
-    .byte $01, $1E, $E2, $52, $AE
-    .byte $01, $1E, $E2, $52, $AE
-    .byte $01, $1E, $E2, $51, $AF
-    .byte $01, $1E, $E2, $51, $AF
-    .byte $01, $1E, $E2, $51, $AF
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1C, $E4, $4E, $B2
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $4F, $B1
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1D, $E3, $50, $B0
-    .byte $01, $1E, $E2, $51, $AF
-    .byte $01, $1E, $E2, $51, $AF
-    .byte $01, $1E, $E2, $51, $AF
-    .byte $01, $1E, $E2, $52, $AE
-    .byte $01, $1E, $E2, $52, $AE
-    .byte $01, $1F, $E1, $53, $AD
-    .byte $01, $1F, $E1, $53, $AD
-    .byte $01, $1F, $E1, $54, $AC
-    .byte $01, $1F, $E1, $54, $AC
-    .byte $01, $1F, $E1, $55, $AB
-    .byte $01, $20, $E0, $55, $AB
-    .byte $01, $20, $E0, $56, $AA
-    .byte $01, $20, $E0, $56, $AA
-    .byte $01, $20, $E0, $57, $A9
-    .byte $01, $21, $DF, $58, $A8
-    .byte $01, $21, $DF, $58, $A8
-    .byte $01, $21, $DF, $59, $A7
-    .byte $01, $22, $DE, $5A, $A6
-    .byte $01, $22, $DE, $5B, $A5
-    .byte $01, $22, $DE, $5C, $A4
-    .byte $01, $23, $DD, $5D, $A3
-    .byte $01, $23, $DD, $5E, $A2
-    .byte $01, $24, $DC, $5F, $A1
-    .byte $01, $24, $DC, $60, $A0
-    .byte $01, $24, $DC, $61, $9F
-    .byte $01, $25, $DB, $62, $9E
-    .byte $01, $25, $DB, $64, $9C
-    .byte $01, $26, $DA, $65, $9B
-    .byte $01, $26, $DA, $67, $99
-    .byte $01, $27, $D9, $69, $97
-    .byte $01, $27, $D9, $6B, $95
-    .byte $01, $28, $D8, $6D, $93
-    .byte $01, $28, $D8, $6F, $91
-    .byte $01, $29, $D7, $72, $8E
-    .byte $01, $29, $D7, $77, $89
-    .byte $01, $2A, $D6, $80, $80
-    .byte $01, $2A, $D6, $FF, $00
-    .byte $01, $2B, $D5, $FF, $00
-    .byte $01, $2C, $D4, $FF, $00
-    .byte $01, $2C, $D4, $FF, $00
-    .byte $01, $2D, $D3, $FF, $00
-    .byte $01, $2E, $D2, $FF, $00
-    .byte $01, $2E, $D2, $FF, $00
-    .byte $01, $2F, $D1, $FF, $00
-    .byte $01, $30, $D0, $FF, $00
-    .byte $01, $30, $D0, $FF, $00
-    .byte $01, $31, $CF, $FF, $00
-    .byte $01, $32, $CE, $FF, $00
-    .byte $01, $33, $CD, $FF, $00
-    .byte $01, $34, $CC, $FF, $00
-    .byte $01, $35, $CB, $FF, $00
-    .byte $01, $35, $CB, $FF, $00
-    .byte $01, $36, $CA, $FF, $00
-    .byte $01, $37, $C9, $FF, $00
-    .byte $01, $38, $C8, $FF, $00
-    .byte $01, $39, $C7, $FF, $00
-    .byte $01, $3A, $C6, $FF, $00
-    .byte $01, $3B, $C5, $FF, $00
-    .byte $01, $3C, $C4, $FF, $00
-    .byte $01, $3D, $C3, $FF, $00
-    .byte $01, $3E, $C2, $FF, $00
-    .byte $01, $40, $C0, $FF, $00
-    .byte $01, $41, $BF, $FF, $00
-    .byte $01, $42, $BE, $FF, $00
-    .byte $01, $43, $BD, $FF, $00
-    .byte $01, $44, $BC, $FF, $00
-    .byte $01, $46, $BA, $FF, $00
-    .byte $01, $47, $B9, $FF, $00
-    .byte $01, $49, $B7, $FF, $00
-    .byte $01, $4A, $B6, $FF, $00
-    .byte $01, $4C, $B4, $FF, $00
-    .byte $01, $4D, $B3, $FF, $00
-    .byte $01, $4F, $B1, $FF, $00
-    .byte $01, $51, $AF, $FF, $00
-    .byte $01, $53, $AD, $FF, $00
-    .byte $01, $55, $AB, $FF, $00
-    .byte $01, $57, $A9, $FF, $00
-    .byte $01, $59, $A7, $FF, $00
-    .byte $01, $5C, $A4, $FF, $00
-    .byte $01, $5E, $A2, $FF, $00
-    .byte $01, $61, $9F, $FF, $00
-    .byte $01, $64, $9C, $FF, $00
-    .byte $01, $68, $98, $FF, $00
-    .byte $01, $6D, $93, $FF, $00
-    .byte $01, $72, $8E, $FF, $00
-    .byte $01, $80, $80, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $01, $FF, $00, $FF, $00
-    .byte $00 ; End of HDMA table
+;         W1L |W1R |W2L |W2R
+DarkLightHdmaTableBase:
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $80, $80, $FF, $00
+    .byte $72, $8E, $FF, $00
+    .byte $6D, $93, $FF, $00
+    .byte $68, $98, $FF, $00
+    .byte $64, $9C, $FF, $00
+    .byte $61, $9F, $FF, $00
+    .byte $5E, $A2, $FF, $00
+    .byte $5C, $A4, $FF, $00
+    .byte $59, $A7, $FF, $00
+    .byte $57, $A9, $FF, $00
+    .byte $55, $AB, $FF, $00
+    .byte $53, $AD, $FF, $00
+    .byte $51, $AF, $FF, $00
+    .byte $4F, $B1, $FF, $00
+    .byte $4D, $B3, $FF, $00
+    .byte $4C, $B4, $FF, $00
+    .byte $4A, $B6, $FF, $00
+    .byte $49, $B7, $FF, $00
+    .byte $47, $B9, $FF, $00
+    .byte $46, $BA, $FF, $00
+    .byte $44, $BC, $FF, $00
+    .byte $43, $BD, $FF, $00
+    .byte $42, $BE, $FF, $00
+    .byte $41, $BF, $FF, $00
+    .byte $40, $C0, $FF, $00
+    .byte $3E, $C2, $FF, $00
+    .byte $3D, $C3, $FF, $00
+    .byte $3C, $C4, $FF, $00
+    .byte $3B, $C5, $FF, $00
+    .byte $3A, $C6, $FF, $00
+    .byte $39, $C7, $FF, $00
+    .byte $38, $C8, $FF, $00
+    .byte $37, $C9, $FF, $00
+    .byte $36, $CA, $FF, $00
+    .byte $35, $CB, $FF, $00
+    .byte $35, $CB, $FF, $00
+    .byte $34, $CC, $FF, $00
+    .byte $33, $CD, $FF, $00
+    .byte $32, $CE, $FF, $00
+    .byte $31, $CF, $FF, $00
+    .byte $30, $D0, $FF, $00
+    .byte $30, $D0, $FF, $00
+    .byte $2F, $D1, $FF, $00
+    .byte $2E, $D2, $FF, $00
+    .byte $2E, $D2, $FF, $00
+    .byte $2D, $D3, $FF, $00
+    .byte $2C, $D4, $FF, $00
+    .byte $2C, $D4, $FF, $00
+    .byte $2B, $D5, $FF, $00
+    .byte $2A, $D6, $FF, $00
+    .byte $2A, $D6, $80, $80
+    .byte $29, $D7, $77, $89
+    .byte $29, $D7, $72, $8E
+    .byte $28, $D8, $6F, $91
+    .byte $28, $D8, $6D, $93
+    .byte $27, $D9, $6B, $95
+    .byte $27, $D9, $69, $97
+    .byte $26, $DA, $67, $99
+    .byte $26, $DA, $65, $9B
+    .byte $25, $DB, $64, $9C
+    .byte $25, $DB, $62, $9E
+    .byte $24, $DC, $61, $9F
+    .byte $24, $DC, $60, $A0
+    .byte $24, $DC, $5F, $A1
+    .byte $23, $DD, $5E, $A2
+    .byte $23, $DD, $5D, $A3
+    .byte $22, $DE, $5C, $A4
+    .byte $22, $DE, $5B, $A5
+    .byte $22, $DE, $5A, $A6
+    .byte $21, $DF, $59, $A7
+    .byte $21, $DF, $58, $A8
+    .byte $21, $DF, $58, $A8
+    .byte $20, $E0, $57, $A9
+    .byte $20, $E0, $56, $AA
+    .byte $20, $E0, $56, $AA
+    .byte $20, $E0, $55, $AB
+    .byte $1F, $E1, $55, $AB
+    .byte $1F, $E1, $54, $AC
+    .byte $1F, $E1, $54, $AC
+    .byte $1F, $E1, $53, $AD
+    .byte $1F, $E1, $53, $AD
+    .byte $1E, $E2, $52, $AE
+    .byte $1E, $E2, $52, $AE
+    .byte $1E, $E2, $51, $AF
+    .byte $1E, $E2, $51, $AF
+    .byte $1E, $E2, $51, $AF
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1C, $E4, $4E, $B2
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $4F, $B1
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1D, $E3, $50, $B0
+    .byte $1E, $E2, $51, $AF
+    .byte $1E, $E2, $51, $AF
+    .byte $1E, $E2, $51, $AF
+    .byte $1E, $E2, $52, $AE
+    .byte $1E, $E2, $52, $AE
+    .byte $1F, $E1, $53, $AD
+    .byte $1F, $E1, $53, $AD
+    .byte $1F, $E1, $54, $AC
+    .byte $1F, $E1, $54, $AC
+    .byte $1F, $E1, $55, $AB
+    .byte $20, $E0, $55, $AB
+    .byte $20, $E0, $56, $AA
+    .byte $20, $E0, $56, $AA
+    .byte $20, $E0, $57, $A9
+    .byte $21, $DF, $58, $A8
+    .byte $21, $DF, $58, $A8
+    .byte $21, $DF, $59, $A7
+    .byte $22, $DE, $5A, $A6
+    .byte $22, $DE, $5B, $A5
+    .byte $22, $DE, $5C, $A4
+    .byte $23, $DD, $5D, $A3
+    .byte $23, $DD, $5E, $A2
+    .byte $24, $DC, $5F, $A1
+    .byte $24, $DC, $60, $A0
+    .byte $24, $DC, $61, $9F
+    .byte $25, $DB, $62, $9E
+    .byte $25, $DB, $64, $9C
+    .byte $26, $DA, $65, $9B
+    .byte $26, $DA, $67, $99
+    .byte $27, $D9, $69, $97
+    .byte $27, $D9, $6B, $95
+    .byte $28, $D8, $6D, $93
+    .byte $28, $D8, $6F, $91
+    .byte $29, $D7, $72, $8E
+    .byte $29, $D7, $77, $89
+    .byte $2A, $D6, $80, $80
+    .byte $2A, $D6, $FF, $00
+    .byte $2B, $D5, $FF, $00
+    .byte $2C, $D4, $FF, $00
+    .byte $2C, $D4, $FF, $00
+    .byte $2D, $D3, $FF, $00
+    .byte $2E, $D2, $FF, $00
+    .byte $2E, $D2, $FF, $00
+    .byte $2F, $D1, $FF, $00
+    .byte $30, $D0, $FF, $00
+    .byte $30, $D0, $FF, $00
+    .byte $31, $CF, $FF, $00
+    .byte $32, $CE, $FF, $00
+    .byte $33, $CD, $FF, $00
+    .byte $34, $CC, $FF, $00
+    .byte $35, $CB, $FF, $00
+    .byte $35, $CB, $FF, $00
+    .byte $36, $CA, $FF, $00
+    .byte $37, $C9, $FF, $00
+    .byte $38, $C8, $FF, $00
+    .byte $39, $C7, $FF, $00
+    .byte $3A, $C6, $FF, $00
+    .byte $3B, $C5, $FF, $00
+    .byte $3C, $C4, $FF, $00
+    .byte $3D, $C3, $FF, $00
+    .byte $3E, $C2, $FF, $00
+    .byte $40, $C0, $FF, $00
+    .byte $41, $BF, $FF, $00
+    .byte $42, $BE, $FF, $00
+    .byte $43, $BD, $FF, $00
+    .byte $44, $BC, $FF, $00
+    .byte $46, $BA, $FF, $00
+    .byte $47, $B9, $FF, $00
+    .byte $49, $B7, $FF, $00
+    .byte $4A, $B6, $FF, $00
+    .byte $4C, $B4, $FF, $00
+    .byte $4D, $B3, $FF, $00
+    .byte $4F, $B1, $FF, $00
+    .byte $51, $AF, $FF, $00
+    .byte $53, $AD, $FF, $00
+    .byte $55, $AB, $FF, $00
+    .byte $57, $A9, $FF, $00
+    .byte $59, $A7, $FF, $00
+    .byte $5C, $A4, $FF, $00
+    .byte $5E, $A2, $FF, $00
+    .byte $61, $9F, $FF, $00
+    .byte $64, $9C, $FF, $00
+    .byte $68, $98, $FF, $00
+    .byte $6D, $93, $FF, $00
+    .byte $72, $8E, $FF, $00
+    .byte $80, $80, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+    .byte $FF, $00, $FF, $00
+
+DarkLightHdmaTableA:
+    .byte $80 | 112
+    .word VEffectLightA
+    .byte $80 | 112
+    .word VEffectLightA + (4 * 112)
+    .byte $00
+
+DarkLightHdmaTableB:
+    .byte $80 | 112
+    .word VEffectLightB
+    .byte $80 | 112
+    .word VEffectLightB + (4 * 112)
+    .byte $00
 
 ;; [inputs] ?
 ;; [outputs] ?
@@ -313,11 +326,14 @@ SetupPlayerPos:
         ldx #0
         stx VPlyData + TPlyData::pvx
         stx VPlyData + TPlyData::pvy
+        stx VPlyData + TPlyData::psx ; + psy
         stx VPlyData + TPlyData::jmptime ; + TPlyData::jmpcnt
         stx VPlyData + TPlyData::grab ; + TPlyData::oldgrab
         stx VPlyData + TPlyData::hoptime ; + TPlyData::hopdir
         stx VPlyData + TPlyData::stamina
         stx VPlyData + TPlyData::dir ; + fl_pri
+
+        stz VEffectHdmaIndex
     NotSettingPlayerPos:
 
 SetupStart:
@@ -376,14 +392,16 @@ SetupHdmaEffects:
     lda #%11100000
     sta COLDATA
 
-    lda #$04 ; +0, +1, +2, +3 (W1L to W2R)
+    lda #%01000100 ; +0, +1, +2, +3 (W1L to W2R)
     sta DMAP6
     lda #<W1L
     sta DMADEST6
-    ldx #.loword(DarkLightHdmaTable)
+    ldx #.loword(DarkLightHdmaTableA)
     stx DMASRC6L
-    lda #^DarkLightHdmaTable
+    lda #^DarkLightHdmaTableA
     sta DMASRC6B
+    lda #^VEffectLightA
+    sta DMALEN6B
 
     lda #%00000000
     sta HDMAEN
@@ -789,6 +807,195 @@ LoadMapSprites_Zero: .word $0000
         sta HDMAEN
         rts
     EndNotDarkEffect:
+.endproc
+
+.proc PfRenderDarkEffect
+    lda VWrdEffect
+    cmp #0
+    bne NotEffectless
+        rts
+    NotEffectless:
+
+    lda VEffectHdmaIndex
+    beq UsingHdmaB
+        ldx #.loword(DarkLightHdmaTableA)
+        stx DMASRC6L
+        lda #^DarkLightHdmaTableA
+        sta DMASRC6B
+
+        bra EndUsingHdmaB
+    UsingHdmaB:
+        ldx #.loword(DarkLightHdmaTableB)
+        stx DMASRC6L
+        lda #^DarkLightHdmaTableB
+        sta DMASRC6B
+    EndUsingHdmaB:
+    rts
+.endproc
+
+.macro PfProcessDarkEffectMacro hdmaLabel
+    ; defined in PfProcessDarkEffect:
+    ; darkEffectOffX = VScb0
+    ; darkEffectOffY = VScb1
+    ; ctr = VScb2
+
+    ; set blank rows at top (if needed, aka y >= 1)
+    lda darkEffectOffY
+    beq @NotNeedTopBlankRows
+    bmi @NotNeedTopBlankRows
+        ; ctr = darkEffectOffY
+        sta ctr
+
+        @TopBlankRowLoop:
+            lda #$FF
+            sta hdmaLabel+0, Y
+            sta hdmaLabel+2, Y
+
+            lda #$00 ; no stz for us, unless I swap all Xs and Ys :(
+            sta hdmaLabel+1, Y
+            sta hdmaLabel+3, Y
+
+            iny
+            iny
+            iny
+            iny
+        dec ctr
+        bne @TopBlankRowLoop
+    @NotNeedTopBlankRows:
+
+    ; ctr = (224 - abs(darkEffectOffY))
+    lda darkEffectOffY
+    bpl @YPositiveForCtr
+        negate8
+    @YPositiveForCtr:
+    sub #224
+    eor #$FF
+    sta ctr
+
+    ; copy circle shape
+    lda darkEffectOffX
+    bmi @MainLoopSub
+    @MainLoopAdd:
+        .repeat 4, I
+            lda DarkLightHdmaTableBase+I, X
+
+            add darkEffectOffX
+            bcc :+
+                lda #$FF
+            :
+            sta hdmaLabel+I, Y
+        .endrep
+
+        inx
+        inx
+        inx
+        inx
+        iny
+        iny
+        iny
+        iny
+        
+        dec ctr
+        bne @MainLoopAdd
+        bra @EndMainLoopSub
+    @EndMainLoopAdd:
+    @MainLoopSub:
+        .repeat 4, I
+            lda DarkLightHdmaTableBase+I, X
+
+            add darkEffectOffX
+            bcs :+
+                lda #$00
+            :
+            sta hdmaLabel+I, Y
+        .endrep
+
+        inx
+        inx
+        inx
+        inx
+        iny
+        iny
+        iny
+        iny
+        
+        dec ctr
+        bne @MainLoopSub
+    @EndMainLoopSub:
+
+    ; set blank rows at bottom (if needed)
+    cpy #(224*4)
+    beq @NotNeedBottomBlankRows
+        @BottomBlankRowLoop:
+            lda #$FF
+            sta hdmaLabel+0, Y
+            sta hdmaLabel+2, Y
+
+            lda #$00
+            sta hdmaLabel+1, Y
+            sta hdmaLabel+3, Y
+
+            iny
+            iny
+            iny
+            iny
+        cpy #(224*4)
+        bne @BottomBlankRowLoop
+    @NotNeedBottomBlankRows:
+.endmacro
+
+.proc PfProcessDarkEffect
+    darkEffectOffX = VScb0
+    darkEffectOffY = VScb1
+    ctr = VScb2
+
+    ; tbd: who is causing B register to be non-zero
+    A16
+    A8Zero
+
+    lda VWrdEffect
+    cmp #0
+    bne NotEffectless
+        rts
+    NotEffectless:
+
+    lda VPlyData + TPlyData::psx
+    sub #128
+    sta darkEffectOffX
+    ;
+    lda VPlyData + TPlyData::psy
+    sub #120
+    sta darkEffectOffY
+
+    ldx #0 ; srcIdx (DarkLightHdmaTableBase)
+    ldy #0 ; dstIdx (VEffectLightA/VEffectLightB)
+    ;
+    ; dstIdx = (darkEffectOffY < 0) ? (-darkEffectOffY * 4) : 0
+    lda darkEffectOffY
+    bpl YPositive
+        negate8
+        mul4
+        tax
+    YPositive:
+
+    lda VEffectHdmaIndex
+    eor #1
+    ;
+    bne UsingHdmaA
+    jmp UsingHdmaB
+    UsingHdmaA:
+        sta VEffectHdmaIndex
+
+        PfProcessDarkEffectMacro VEffectLightA
+
+        jmp EndUsingHdmaB
+    UsingHdmaB:
+        sta VEffectHdmaIndex
+
+        PfProcessDarkEffectMacro VEffectLightB
+    EndUsingHdmaB:
+
+    rts
 .endproc
 
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1545,6 +1752,7 @@ MainLoopWait:
     ; jsr RenderHud
 
     ; === during screen time ===
+    jsr PfProcessDarkEffect
     jsr PfUpdateInput
     jsr PfUpdateSpritesBeforeCam
     jsr PfDebugControls

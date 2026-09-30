@@ -11,6 +11,8 @@ IHYT_VARS_INC = 1
     py .word         ; y position                   ; +04
     pvx .word        ; x velocity                   ; +06
     pvy .word        ; y velocity                   ; +08
+    psx .byte        ; screen x position (used by dark effect)
+    psy .byte        ; screen y position (used by dark effect)
     
     jmptime .byte    ; frames left that jump can be held
     jmpcnt  .byte    ; initial jumps used (reset to 0 when landing on ground)
@@ -105,6 +107,7 @@ TCharDataFlActive  = $40 ; sprite is being used
 .global VSprLo, VSprHi
 ; WORLD ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .global VWrdStripCpyX, VWrdStripCpyY, VTileMetaTable
+.global VEffectLightA, VEffectLightB, VEffectHdmaIndex, VEffectRsvd
 ; TEXT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .global VMsgBuffer
 ;
