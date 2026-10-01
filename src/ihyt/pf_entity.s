@@ -1435,19 +1435,19 @@ OutOfScreenSpace:
     ldy VPlyData + TPlyData::py
     jsr PfToPointOnScreen ;; [takes] SCRW0, SCRW1, SCRW2, SCRW3
 
-    A16
+    A8
+        ; remember the screen position for the dark effect
+        ; we don't care about the high x bit for now... (should we?)
+        tya
+        cmp #240 ; skip setting psx/psy if off screen
+        beq SkipPlayerScreenVarUpdate
+            add #8 ; center Y position
+            sta VPlyData + TPlyData::psy
 
-    ; remember the screen position for the dark effect
-    ; we don't care about the high x bit for now... (should we?)
-    ; this will overwrite scy, but we overwrite that soon after
-    txa
-    add #8 ; center X position
-    sta VPlyData + TPlyData::psx
-    ;
-    tya
-    add #8 ; center Y position
-    A8 ; hand is kinda forced here... I don't want to overwrite the next byte
-    sta VPlyData + TPlyData::psy
+            txa
+            add #8 ; center X position
+            sta VPlyData + TPlyData::psx
+        SkipPlayerScreenVarUpdate:
     A16
 
     ; set high X flag
