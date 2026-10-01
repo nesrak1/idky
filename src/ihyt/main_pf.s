@@ -37,9 +37,9 @@ ModePfResetNext:
     A16
     stz VZero
 
-    lda #240
+    lda #(4*16)
     sta VWrdNextX
-    lda #240
+    lda #(55*16)
     sta VWrdNextY
 
     stz VWrdEffect ; + VWrdRsvd
@@ -437,7 +437,7 @@ SetupEnd:
     ; Y = &AWorldTilesetAll_MetaTable[AWorldLevelAll_MetaTable[VWrdNextLvl].6].0 - &AWorldTilesetAll_MetaTable
     ; (Y is used by WfvDmaCopyOneRegOff)
     lda VWrdNextLvl
-    beq NoLevelSubtract ; 2026 me: why are we doing this?
+    beq NoLevelSubtract
         dec
     NoLevelSubtract:
     ;
@@ -950,8 +950,7 @@ LoadMapSprites_Zero: .word $0000
     ctr = VScb2
 
     ; tbd: who is causing B register to be non-zero
-    A16
-    A8Zero
+    AZero
 
     lda VWrdEffect
     cmp #0

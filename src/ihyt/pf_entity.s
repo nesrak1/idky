@@ -973,12 +973,15 @@ HandleSolidTile:
             ; push player down
             A16
             lda inro_plyTileWy
-            add #(16+8)
+            add #(16+8+1)
             sta VPlyData + TPlyData::py
+
+            lda #300
+            sta VPlyData + TPlyData::pvy
             A8
 
-            lda #0 ; ...
-            sta VPlyData + TPlyData::pvy
+            stz VPlyData + TPlyData::pfy
+
             rts
         HandleTileUpDone:
 
@@ -1463,6 +1466,7 @@ OutOfScreenSpace:
         .a16
         A8
         lda VSprHi+$00
+        and #%11111100
         ora #%00000010
         sta VSprHi+$00
     EndSetXFlagFalse:
